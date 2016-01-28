@@ -27,7 +27,7 @@ public class StatisticsCalculator {
 		for (int i=0;i<4;i++){
 			int Summe=Sum[0][i]+Sum[1][i]+Sum[2][i]+Sum[3][i];
 			for (int j=0;j<4;j++){
-				Proz[i][j]=(double)Sum[j][i]/(double)Summe;
+				Proz[j][i]=(double)Sum[j][i]/(double)Summe;
 			}
 		}
 		
@@ -40,7 +40,7 @@ public class StatisticsCalculator {
 		return Proz;
 	}
 
-	//Test Methode zum Berechnen von Häufigkeiten
+	//Test Methode zum Berechnen von Hï¿½ufigkeiten
 	public void Statistics(String seq){
 		String[]LeuCodes={"CTT", "CTC", "CTA", "CTG", "TTA", "TTG"};
 		String Start="ATG";

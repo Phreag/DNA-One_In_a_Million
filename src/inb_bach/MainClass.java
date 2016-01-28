@@ -32,7 +32,7 @@ public class MainClass {
 		// 568815597 = 250 MB Mixed Chromosom 1
 		// 671162122 = 32 MB Drosophila melanogaster chromosome 2R
 		
-		DNASequence DNA=conn.LoadFastaFile(671162122);
+		DNASequence DNA=conn.LoadFastaFile(568815597);
 		stat.Statistics(DNA.getSequenceAsString());
 		stat.getMatrix(DNA.getSequenceAsString());
 
