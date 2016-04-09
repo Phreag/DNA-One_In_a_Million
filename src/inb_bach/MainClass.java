@@ -73,6 +73,7 @@ public class MainClass {
 		S.get_Deviation(4);
 		S.get_Deviation(5);
 		
+<<<<<<< HEAD
 		S.setBaseWeighting(factors);
 		System.out.println("####### Mit Basen-Gewichtung ######");
 		S.get_Deviation(1);
@@ -89,6 +90,11 @@ public class MainClass {
 		S.get_Deviation(4);
 		S.get_Deviation(5);
 
+=======
+		DNASequence DNA=conn.LoadFastaFile(568815597);
+		stat.Statistics(DNA.getSequenceAsString());
+		stat.getMatrix(DNA.getSequenceAsString());
+>>>>>>> origin/master
 
 		
 
