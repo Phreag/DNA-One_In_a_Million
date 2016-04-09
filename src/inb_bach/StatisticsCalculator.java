@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public class StatisticsCalculator {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
-	
+	private String[]Bases={"T","C","A","G"};
 	public double[][] getMatrix(String seq){
 		System.out.println("");
 		//C - T - A - G
@@ -33,7 +33,7 @@ public class StatisticsCalculator {
 		//PrintMatrix(Proz);
 		return Proz;
 	}
-	//Berechnet die Elementeweise Different zwischen den beiden Input-Matrizen
+	//Berechnet die Elementeweise Differenz zwischen den beiden Input-Matrizen
 	public double[][] MatrixDiff(double[][] M1,double[][] M2){
 		double[][]Erg=new double[4][4];
 		for (int i=0;i<4;i++){
@@ -60,84 +60,100 @@ public class StatisticsCalculator {
 		System.out.println("A "+df.format(Proz[0][2])+" -- "+df.format(Proz[1][2])+" -- "+df.format(Proz[2][2])+" -- "+df.format(Proz[3][2]));
 		System.out.println("G "+df.format(Proz[0][3])+" -- "+df.format(Proz[1][3])+" -- "+df.format(Proz[2][3])+" -- "+df.format(Proz[3][3]));	
 	}
-	
-
-	//Test Methode zum Berechnen von Häufigkeiten
-	public void Statistics(String seq){
-		String[]LeuCodes={"CTT", "CTC", "CTA", "CTG", "TTA", "TTG"};
-		String Start="ATG";
-		String[]Stop={"TGA","TAG","TAA"};
-		System.out.println("");
-		System.out.println("#### Statistics for nucleotides after a specific triplet: ####");
-		for (int i=0;i<LeuCodes.length;i++){
-			int count=0;
-			int[]stat={0,0,0,0};
-			for (int j=0;j<seq.length()-3;j++){
-				if (seq.substring(j, j+3).equals(LeuCodes[i])){
-					count++;
-					if(seq.substring(j+3, j+4).equals("C")){
-						stat[0]++;
-					}else if(seq.substring(j+3, j+4).equals("T")){
-						stat[1]++;
-					}else if(seq.substring(j+3, j+4).equals("A")){
-						stat[2]++;
-					}else if(seq.substring(j+3, j+4).equals("G")){
-						stat[3]++;
-					}
-				}
-			}
-			
-			double[] proz={((double)stat[0]/(double)count)*100,((double)stat[1]/(double)count)*100,((double)stat[2]/(double)count)*100,((double)stat[3]/(double)count)*100};
-			System.out.println("Current triplet: '"+LeuCodes[i]+"' Total count:"+count);
-			System.out.println("  C:"+df.format(proz[0])+"% T:"+df.format(proz[1])+"% A:"+df.format(proz[2])+"% G:"+df.format(proz[3])+"%");
-			System.out.println("  C:"+stat[0]+" T:"+stat[1]+" A:"+stat[2]+" G:"+stat[3]);
-		}
-		System.out.println("");
-		System.out.println("#### Statistics for nucleotides in front of a specific triplet: ####");
-		for (int i=0;i<LeuCodes.length;i++){
-			int count=0;
-			int[]stat={0,0,0,0};
-			for (int j=1;j<seq.length()-2;j++){
-				if (seq.substring(j, j+3).equals(LeuCodes[i])){
-					count++;
-					if(seq.substring(j-1, j).equals("C")){
-						stat[0]++;
-					}else if(seq.substring(j-1, j).equals("T")){
-						stat[1]++;
-					}else if(seq.substring(j-1, j).equals("A")){
-						stat[2]++;
-					}else if(seq.substring(j-1, j).equals("G")){
-						stat[3]++;
-					}
-				}
-			}
-			
-			double[] proz={((double)stat[0]/(double)count)*100,((double)stat[1]/(double)count)*100,((double)stat[2]/(double)count)*100,((double)stat[3]/(double)count)*100};
-			System.out.println("Current triplet: '"+LeuCodes[i]+"' Total count:"+count);
-			System.out.println("  C:"+df.format(proz[0])+"% T:"+df.format(proz[1])+"% A:"+df.format(proz[2])+"% G:"+df.format(proz[3])+"%");
-			System.out.println("  C:"+stat[0]+" T:"+stat[1]+" A:"+stat[2]+" G:"+stat[3]);
-		}
+	public double[] getNucleotideDistribution(String seq){
 		int count=0;
 		int[]stat={0,0,0,0};
 		for (int i=0;i<seq.length();i++){
-			
 			count++;
-			if(seq.charAt(i)=='C'){
+			if(seq.charAt(i)=='T'){
 				stat[0]++;
-			}else if(seq.charAt(i)=='T'){
+			}else if(seq.charAt(i)=='C'){
 				stat[1]++;
-			}else if(seq.charAt(i)=='G'){
-				stat[2]++;
 			}else if(seq.charAt(i)=='A'){
+				stat[2]++;
+			}else if(seq.charAt(i)=='G'){
 				stat[3]++;
 			}
 			
 		}
-		System.out.println("");
-		System.out.println("Total distribution of nucleotides in the given sequence:");
-		double[] proz={((double)stat[0]/(double)count)*100,((double)stat[1]/(double)count)*100,((double)stat[2]/(double)count)*100,((double)stat[3]/(double)count)*100};
-		System.out.println("  C:"+df.format(proz[0])+"% T:"+df.format(proz[1])+"% A:"+df.format(proz[2])+"% G:"+df.format(proz[3])+"%");
-		System.out.println("  C:"+stat[0]+" T:"+stat[1]+" A:"+stat[2]+" G:"+stat[3]);
+		double[] proz={((double)stat[0]/(double)count),((double)stat[1]/(double)count),((double)stat[2]/(double)count),((double)stat[3]/(double)count)};
+		System.out.println("Nucleotide Distribution:");
+		System.out.println("  T:"+df.format(proz[0])+" C:"+df.format(proz[1])+" A:"+df.format(proz[2])+" G:"+df.format(proz[3])+"");
+		return proz;
+	}
+	
+	public double[][][] getTripletDistribution(String seq){
+		int[][][]triplets=new int[4][4][4];
+		int count=0;
+		System.out.println("Berechne Triplet-Verteilung (ohne Leseraster)");	
+		for (int x=0;x<seq.length()-3;x++){
+			int i=-1;
+			int j=-1;
+			int k=-1;
+			switch(seq.charAt(x)){//1. Base
+			case 'T':
+				i=0;break;
+			case 'C':
+				i=1;break;
+			case 'A':
+				i=2;break;
+			case 'G':
+				i=3;break;
+			}
+			
+			switch(seq.charAt(x+1)){
+			case 'T':
+				j=0;break;
+			case 'C':
+				j=1;break;
+			case 'A':
+				j=2;break;
+			case 'G':
+				j=3;break;
+			}
+			
+			switch(seq.charAt(x+2)){
+			case 'T':
+				k=0;break;
+			case 'C':
+				k=1;break;
+			case 'A':
+				k=2;break;
+			case 'G':
+				k=3;break;
+			}
+			if(i==-1||j==-1||k==-1)continue;
+			String Pattern=Bases[i]+Bases[j]+Bases[k];
+			if (Pattern.equalsIgnoreCase("TAA")||Pattern.equalsIgnoreCase("TAG")||Pattern.equalsIgnoreCase("TGA"))continue;
+			if (seq.substring(x,x+3).equalsIgnoreCase(Pattern)){
+				triplets[i][j][k]++;
+				count++;
+			}
+		}
+		double[][][]relativeCount=new double[4][4][4];
+		for (int i=0;i<4;i++){
+			for (int j=0;j<4;j++){
+				for (int k=0;k<4;k++){
+					
+					relativeCount[i][j][k]=((double)triplets[i][j][k]*61)/(double)count;
+					//System.out.println(Bases[i]+Bases[j]+Bases[k]+" - "+relativeCount[i][j][k]);
+				}
+			}
+		}
+		double sum=0;
+		for (int i=0;i<4;i++){
+			for (int j=0;j<4;j++){
+				for (int k=0;k<4;k++){
+					String Triplet=Bases[i]+Bases[j]+Bases[k];
+					if (Triplet.equalsIgnoreCase("TAA")||Triplet.equalsIgnoreCase("TAG")||Triplet.equalsIgnoreCase("TGA"))continue;
+					sum+=relativeCount[i][j][k];
+					//System.out.println(Bases[i]+Bases[j]+Bases[k]+" - "+relativeCount[i][j][k]);
+				}
+			}
+		}
+		sum=sum/61;
+		System.out.println("Average:" +sum);
+		return relativeCount;
 	}
 
 }

@@ -1,5 +1,5 @@
 package inb_bach;
-
+ 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import org.biojava.nbio.core.sequence.io.FastaReader;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 import org.biojava.nbio.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava.nbio.core.sequence.io.ProteinSequenceCreator;
+
+import Objects.GeneCode;
 
 public class MainClass {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
@@ -49,14 +51,45 @@ public class MainClass {
 //    	}
 //		String MixedSeq=builder.toString();
 //		System.out.println("Mixed Length: "+MixedSeq.length());
-		DNASequence Seq1=conn.LoadFastaFile(47118301);
-		double[][] Seq1Matrix=stat.getMatrix(Seq1.getSequenceAsString());
+//		DNASequence Seq1=conn.LoadFastaFile(47118301);
+//		double[][] Seq1Matrix=stat.getMatrix(Seq1.getSequenceAsString());
+//		
+//		DNASequence Seq2=conn.LoadFastaFile(51847843);
+//		double[][] Seq2Matrix=stat.getMatrix(Seq2.getSequenceAsString());
+//		
+//		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
+		DNASequence Seq1=conn.LoadFastaFile(51847843);
+		double[] w=stat.getNucleotideDistribution(Seq1.getSequenceAsString());
+		double[] factors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
 		
-		DNASequence Seq2=conn.LoadFastaFile(51847843);
-		double[][] Seq2Matrix=stat.getMatrix(Seq2.getSequenceAsString());
+		double[][][]tweights=stat.getTripletDistribution(Seq1.getSequenceAsString());
+		GeneCode g=new GeneCode();
+		StabilityCalculator S=new StabilityCalculator(g);
 		
-		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
+		System.out.println("####### Ohne Gewichtung ######");
+		S.get_Deviation(1);
+		S.get_Deviation(2);
+		S.get_Deviation(3);
+		S.get_Deviation(4);
+		S.get_Deviation(5);
 		
+		S.setBaseWeighting(factors);
+		System.out.println("####### Mit Basen-Gewichtung ######");
+		S.get_Deviation(1);
+		S.get_Deviation(2);
+		S.get_Deviation(3);
+		S.get_Deviation(4);
+		S.get_Deviation(5);
+		
+		S.setTripletWeighting(tweights);
+		System.out.println("####### Mit Basen- und Triplet-Gewichtung ######");
+		S.get_Deviation(1);
+		S.get_Deviation(2);
+		S.get_Deviation(3);
+		S.get_Deviation(4);
+		S.get_Deviation(5);
+
+
 		
 
 		//###################################################################
@@ -71,7 +104,7 @@ public class MainClass {
 	 * 2. Berechnung Sabilität gemäß Paper (H.Sapiens)
 	 *   2.1 + Mit a-priori-WS
 	 *   2.2 + Mit Triplet-a-priori-WS
-	 *   2.3 Mit WS bzgl Rechts-Links shift
+	 *   2.3 Mit WS bzgl Rechts-Links shift -> Macht keinen Unterschied da das Symmetrisch ist.
 	 * 
 	 *  Transition matrix Chromosom 1
 	 *	--- C ------- T ------- A ------- G
