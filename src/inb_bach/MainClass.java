@@ -56,7 +56,9 @@ public class MainClass {
 //		
 //		DNASequence Seq2=conn.LoadFastaFile(51847843);
 //		double[][] Seq2Matrix=stat.getMatrix(Seq2.getSequenceAsString());
-//		
+//		DNASequence DNA=conn.LoadFastaFile(568815597);
+//		stat.Statistics(DNA.getSequenceAsString());
+//		stat.getMatrix(DNA.getSequenceAsString());
 //		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
 		DNASequence Seq1=conn.LoadFastaFile(51847843);
 		double[] w=stat.getNucleotideDistribution(Seq1.getSequenceAsString());
@@ -73,7 +75,6 @@ public class MainClass {
 		S.get_Deviation(4);
 		S.get_Deviation(5);
 		
-<<<<<<< HEAD
 		S.setBaseWeighting(factors);
 		System.out.println("####### Mit Basen-Gewichtung ######");
 		S.get_Deviation(1);
@@ -90,11 +91,7 @@ public class MainClass {
 		S.get_Deviation(4);
 		S.get_Deviation(5);
 
-=======
-		DNASequence DNA=conn.LoadFastaFile(568815597);
-		stat.Statistics(DNA.getSequenceAsString());
-		stat.getMatrix(DNA.getSequenceAsString());
->>>>>>> origin/master
+		
 
 		
 

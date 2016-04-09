@@ -33,39 +33,12 @@ public class StatisticsCalculator {
 		//PrintMatrix(Proz);
 		return Proz;
 	}
-<<<<<<< HEAD
 	//Berechnet die Elementeweise Differenz zwischen den beiden Input-Matrizen
 	public double[][] MatrixDiff(double[][] M1,double[][] M2){
 		double[][]Erg=new double[4][4];
 		for (int i=0;i<4;i++){
 			for (int j=0;j<4;j++){
 				Erg[i][j]=M1[i][j]-M2[i][j];
-=======
-
-	//Test Methode zum Berechnen von H�ufigkeiten
-	public void Statistics(String seq){
-		String[]LeuCodes={"CTT", "CTC", "CTA", "CTG", "TTA", "TTG"};
-		String Start="ATG";
-		String[]Stop={"TGA","TAG","TAA"};
-		System.out.println("");
-		System.out.println("#### Statistics for nucleotides after a specific triplet: ####");
-		for (int i=0;i<LeuCodes.length;i++){
-			int count=0;
-			int[]stat={0,0,0,0};
-			for (int j=0;j<seq.length()-3;j++){
-				if (seq.substring(j, j+3).equals(LeuCodes[i])){
-					count++;
-					if(seq.substring(j+3, j+4).equals("C")){
-						stat[0]++;
-					}else if(seq.substring(j+3, j+4).equals("T")){
-						stat[1]++;
-					}else if(seq.substring(j+3, j+4).equals("A")){
-						stat[2]++;
-					}else if(seq.substring(j+3, j+4).equals("G")){
-						stat[3]++;
-					}
-				}
->>>>>>> origin/master
 			}
 		}
 		double sum=0;
