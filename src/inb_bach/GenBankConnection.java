@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
@@ -12,6 +14,26 @@ import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 
 public class GenBankConnection {
+	public List<DNASequence> LoadMixedFile(){
+		File f=new File("data/Mixed.fasta");
+		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
+		try{
+			LinkedHashMap<String, DNASequence> a = FastaReaderHelper.readFastaDNASequence(new File("data/Mixed.fasta"));
+			List<DNASequence> Result=new ArrayList<DNASequence>();
+			for (  Entry<String, DNASequence> entry : a.entrySet() ) {
+				System.out.println("Loaded: " + entry.getValue().getOriginalHeader() + " length = " + entry.getValue().getSequenceAsString().length() + " nucleotides" );
+				Result.add (entry.getValue());
+			}
+			if (Result.size()==0)return null;
+			return Result;
+		} catch (Exception e) {
+			System.out.println("ERROR: FASTA-File could not be loaded.");
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	//Loads a FASTA file from /data
 	//If the File doesnt exist it donwloads the sequence from the GenBank.
 		public DNASequence LoadFastaFile (int GeneID){
@@ -40,8 +62,10 @@ public class GenBankConnection {
 					System.out.println("Writing changes to file...");
 					File=Header+Seq;
 					f.delete();
+					f.createNewFile();
 					PrintWriter out = new PrintWriter("data/"+GeneID+".fasta");
 					out.println(File);
+					out.close();
 					
 					
 				} catch (IOException e) {
@@ -81,4 +105,5 @@ public class GenBankConnection {
 			}
 			return true;
 		}
+		
 	}
