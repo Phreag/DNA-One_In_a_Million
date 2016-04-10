@@ -33,6 +33,10 @@ public class GeneCode {
 		//Can be used to instantiate any generated code
 		this.Mapping=Mapping;
 	}
+	public void changeCode(String[] Mapping){
+		//Can be used to instantiate any generated code
+		this.Mapping=Mapping;
+	}
 	public String getAminoAcid(String Codon){
 		if(Codon.length()!=3){
 			System.out.println("FEHLERHAFTES CODON");

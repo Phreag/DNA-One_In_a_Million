@@ -20,6 +20,9 @@ public class StabilityCalculator {
 	public StabilityCalculator(GeneCode Code){
 		this.Code=Code;
 	}
+	public void ChangeCode(String[] Mapping){
+		Code.changeCode(Mapping);
+	}
 	public void setBaseWeighting(double[] weighting){
 		baseweighting=true;
 		baseWeights=weighting;

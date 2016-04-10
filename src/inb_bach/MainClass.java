@@ -60,6 +60,11 @@ public class MainClass {
 //		stat.Statistics(DNA.getSequenceAsString());
 //		stat.getMatrix(DNA.getSequenceAsString());
 //		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
+		CodePermutation P=new CodePermutation();
+		//P.generateCodes();
+		P.CalculateStabilities("Vasdf");
+		if (true)return;
+		
 		DNASequence Seq1=conn.LoadFastaFile(51847843);
 		double[] w=stat.getNucleotideDistribution(Seq1.getSequenceAsString());
 		double[] factors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
@@ -108,6 +113,11 @@ public class MainClass {
 	 *   2.1 + Mit a-priori-WS
 	 *   2.2 + Mit Triplet-a-priori-WS
 	 *   2.3 Mit WS bzgl Rechts-Links shift -> Macht keinen Unterschied da das Symmetrisch ist.
+	 *   
+	 *   TODO
+	 *   Transition Matrix für Shift einbinden
+	 *   Multithreaded Calculation für Stabilitäten (File als Parameter)
+	 *   
 	 * 
 	 *  Transition matrix Chromosom 1
 	 *	--- C ------- T ------- A ------- G
