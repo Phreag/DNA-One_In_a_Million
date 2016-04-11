@@ -86,77 +86,36 @@ public class StabilityCalculator {
 		switch (Modus){
 		case 1:
 			deviation=deviation/174;
-			System.out.println("MS1: "+deviation );
+			//System.out.println("MS1: "+deviation );
 			break;
 		case 2:
 			deviation=deviation/176;
-			System.out.println("MS2: "+deviation );
+			//System.out.println("MS2: "+deviation );
 			break;
 		case 3:
 			deviation=deviation/176;
-			System.out.println("MS3: "+deviation );
+			//System.out.println("MS3: "+deviation );
 			break;
 		case 4:
 			deviation=deviation/232;
-			System.out.println("rMS: "+deviation );
+			//System.out.println("rMS: "+deviation );
 			break;
 		case 5:
 			deviation=deviation/232;
-			System.out.println("lMS: "+deviation );
+			//System.out.println("lMS: "+deviation );
 			break;
 		}
 		return deviation;
 	}
-	
-	
-	
-	public double get_rMS(){
-		double deviation=0.0;
-		for (String a:Bases){
-			for (String b:Bases){
-				for (String c:Bases){
-					String Amino=Code.getAminoAcid(a+b+c);
-					if (Amino.length()!=3)continue; //Filtert Stop Codons
-					double Polar1=Constants.getPolarReq(Amino);
-					Double Diff=0.0;
-					for (String x:Bases){
-						String Amino2=Code.getAminoAcid(x+a+b);
-						if (Amino2.length()!=3)continue; //Filtert Stop Codons
-						double Polar2=Constants.getPolarReq(Amino2);
-						double difference=(Polar1-Polar2);
-						Diff=Diff+(difference)*(difference);
-					}
-					deviation=deviation+Diff;
-				}
-			}
-		}
-		deviation=deviation/232;
-		System.out.println("rMS: "+deviation );
-		return deviation;
+	public double getMS0(double MS1, double MS2, double MS3){
+		MS1=MS1*174;
+		MS2=MS2*176;
+		MS3=MS3*176;
+		return(MS1+MS2+MS3)/(174+176+176);
 	}
-	
-	public double get_lMS(){
-		double deviation=0.0;
-		for (String a:Bases){
-			for (String b:Bases){
-				for (String c:Bases){
-					String Amino=Code.getAminoAcid(a+b+c);
-					if (Amino.length()!=3)continue; //Filtert Stop Codons
-					double Polar1=Constants.getPolarReq(Amino);
-					Double Diff=0.0;
-					for (String x:Bases){
-						String Amino2=Code.getAminoAcid(b+c+x);
-						if (Amino2.length()!=3)continue; //Filtert Stop Codons
-						double Polar2=Constants.getPolarReq(Amino2);
-						double difference=(Polar1-Polar2);
-						Diff=Diff+(difference)*(difference);
-					}
-					deviation=deviation+Diff;
-				}
-			}
-		}
-		deviation=deviation/232;
-		System.out.println("lMS: "+deviation );
-		return deviation;
+	public double getfMS(double rMS, double lMS){
+		rMS=rMS*232;
+		lMS=lMS*232;
+		return(rMS+lMS)/(232+232);
 	}
 }

@@ -25,6 +25,8 @@ public class MainClass {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	static StatisticsCalculator stat=new StatisticsCalculator();
 	static GenBankConnection conn=new GenBankConnection();
+	public static double[] factors;
+	public static double[][][] tweights;
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
@@ -60,41 +62,57 @@ public class MainClass {
 //		stat.Statistics(DNA.getSequenceAsString());
 //		stat.getMatrix(DNA.getSequenceAsString());
 //		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
-		CodePermutation P=new CodePermutation();
-		//P.generateCodes();
-		P.CalculateStabilities("Vasdf");
-		if (true)return;
 		
-		DNASequence Seq1=conn.LoadFastaFile(51847843);
+		
+//		List<DNASequence> Mixed=conn.LoadMixedFile();
+//		StringBuilder builder = new StringBuilder();
+//		for(DNASequence seq : Mixed) {		    
+//			builder.append(seq.getSequenceAsString());
+//    	}
+//		String MixedSeq=builder.toString();
+//		double[] w=stat.getNucleotideDistribution(MixedSeq);
+//		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
+//		factors=tempfactors;
+//		tweights=stat.getTripletDistribution(MixedSeq);
+		
+		
+		
+		DNASequence Seq1=conn.LoadFastaFile(568815597);
 		double[] w=stat.getNucleotideDistribution(Seq1.getSequenceAsString());
-		double[] factors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
+		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
+		factors=tempfactors;
+		tweights=stat.getTripletDistribution(Seq1.getSequenceAsString());
 		
-		double[][][]tweights=stat.getTripletDistribution(Seq1.getSequenceAsString());
+		CodePermutation P=new CodePermutation();
+		P.generateCodes();
+		P.calculateValues();
+		if(true)return;
+		
 		GeneCode g=new GeneCode();
 		StabilityCalculator S=new StabilityCalculator(g);
 		
 		System.out.println("####### Ohne Gewichtung ######");
-		S.get_Deviation(1);
-		S.get_Deviation(2);
-		S.get_Deviation(3);
-		S.get_Deviation(4);
-		S.get_Deviation(5);
+		System.out.println("MS1: "+S.get_Deviation(1) );
+		System.out.println("MS2: "+S.get_Deviation(2) );
+		System.out.println("MS3: "+S.get_Deviation(3) );
+		System.out.println("rMS: "+S.get_Deviation(4) );
+		System.out.println("lMS: "+S.get_Deviation(5) );
 		
 		S.setBaseWeighting(factors);
 		System.out.println("####### Mit Basen-Gewichtung ######");
-		S.get_Deviation(1);
-		S.get_Deviation(2);
-		S.get_Deviation(3);
-		S.get_Deviation(4);
-		S.get_Deviation(5);
+		System.out.println("MS1: "+S.get_Deviation(1) );
+		System.out.println("MS2: "+S.get_Deviation(2) );
+		System.out.println("MS3: "+S.get_Deviation(3) );
+		System.out.println("rMS: "+S.get_Deviation(4) );
+		System.out.println("lMS: "+S.get_Deviation(5) );
 		
 		S.setTripletWeighting(tweights);
 		System.out.println("####### Mit Basen- und Triplet-Gewichtung ######");
-		S.get_Deviation(1);
-		S.get_Deviation(2);
-		S.get_Deviation(3);
-		S.get_Deviation(4);
-		S.get_Deviation(5);
+		System.out.println("MS1: "+S.get_Deviation(1) );
+		System.out.println("MS2: "+S.get_Deviation(2) );
+		System.out.println("MS3: "+S.get_Deviation(3) );
+		System.out.println("rMS: "+S.get_Deviation(4) );
+		System.out.println("lMS: "+S.get_Deviation(5) );
 
 		
 

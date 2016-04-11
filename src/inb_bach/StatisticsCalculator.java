@@ -5,8 +5,9 @@ import java.text.DecimalFormat;
 public class StatisticsCalculator {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	private String[]Bases={"T","C","A","G"};
+	
 	public double[][] getMatrix(String seq){
-		System.out.println("");
+		System.out.println("Berechne Übergangsmatrix...");
 		//C - T - A - G
 		int[][] Sum=new int[4][4];
 		double[][]Proz=new double[4][4];
@@ -27,7 +28,7 @@ public class StatisticsCalculator {
 		for (int i=0;i<4;i++){
 			int Summe=Sum[0][i]+Sum[1][i]+Sum[2][i]+Sum[3][i];
 			for (int j=0;j<4;j++){
-				Proz[j][i]=(double)Sum[j][i]/(double)Summe;
+				Proz[j][i]=((double)Sum[j][i]/(double)Summe)*4;
 			}
 		}
 		//PrintMatrix(Proz);
@@ -61,10 +62,8 @@ public class StatisticsCalculator {
 		System.out.println("G "+df.format(Proz[0][3])+" -- "+df.format(Proz[1][3])+" -- "+df.format(Proz[2][3])+" -- "+df.format(Proz[3][3]));	
 	}
 	public double[] getNucleotideDistribution(String seq){
-		int count=0;
 		int[]stat={0,0,0,0};
 		for (int i=0;i<seq.length();i++){
-			count++;
 			if(seq.charAt(i)=='T'){
 				stat[0]++;
 			}else if(seq.charAt(i)=='C'){
@@ -74,8 +73,8 @@ public class StatisticsCalculator {
 			}else if(seq.charAt(i)=='G'){
 				stat[3]++;
 			}
-			
 		}
+		int count=stat[0]+stat[1]+stat[2]+stat[3];
 		double[] proz={((double)stat[0]/(double)count),((double)stat[1]/(double)count),((double)stat[2]/(double)count),((double)stat[3]/(double)count)};
 		System.out.println("Nucleotide Distribution:");
 		System.out.println("  T:"+df.format(proz[0])+" C:"+df.format(proz[1])+" A:"+df.format(proz[2])+" G:"+df.format(proz[3])+"");
@@ -152,8 +151,7 @@ public class StatisticsCalculator {
 			}
 		}
 		sum=sum/61;
-		System.out.println("Average:" +sum);
+		//System.out.println("Average:" +sum);
 		return relativeCount;
 	}
-
 }
