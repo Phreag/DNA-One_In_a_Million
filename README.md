@@ -1,4 +1,2 @@
-# TheOneCode
-# Bachelorarbeit-Code
-# Bioinformatik
+
 
