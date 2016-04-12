@@ -10,6 +10,7 @@ public class StabilityCalculator {
 	private double[] baseWeights;
 	private boolean tripletWeighting=false;
 	private double[][][] tripletWeights;
+	private int Bias=1;
 	/* Deviationmode:
 	 * 1=MS1 - Default
 	 * 2=MS2
@@ -31,6 +32,10 @@ public class StabilityCalculator {
 		tripletWeighting=true;
 		tripletWeights=weighting;
 	}
+	public void setTransitionTransversionBias(int Bias){
+		this.Bias=Bias;
+	}
+	
 	
 	public double get_Deviation(int Modus){
 		if(!(Modus>=1&&Modus<=5)){
@@ -77,6 +82,23 @@ public class StabilityCalculator {
 						if (tripletWeighting){
 							difference=difference*tripletWeights[i][j][k];
 						}
+						if(Bias!=1&&Modus<4){
+							String from="";
+							switch (Modus){
+							case 1:
+								from=a;
+								break;
+							case 2:
+								from=b;
+								break;
+							case 3:
+								from=c;
+								break;
+							}
+							if (isTransition(from, x)){
+								difference=difference*Bias;
+							}
+						}
 						Diff+=difference;
 					}
 					deviation=deviation+Diff;
@@ -85,15 +107,27 @@ public class StabilityCalculator {
 		}
 		switch (Modus){
 		case 1:
-			deviation=deviation/174;
+			if (Bias==1){
+				deviation=deviation/174;
+			}else{
+				deviation=deviation/(174+(Bias*58));
+			}
 			//System.out.println("MS1: "+deviation );
 			break;
 		case 2:
-			deviation=deviation/176;
+			if (Bias==1){
+				deviation=deviation/176;
+			}else{
+				deviation=deviation/(176+(Bias*60));
+			}
 			//System.out.println("MS2: "+deviation );
 			break;
 		case 3:
-			deviation=deviation/176;
+			if (Bias==1){
+				deviation=deviation/176;
+			}else{
+				deviation=deviation/(176+(Bias*60));
+			}
 			//System.out.println("MS3: "+deviation );
 			break;
 		case 4:
@@ -107,12 +141,29 @@ public class StabilityCalculator {
 		}
 		return deviation;
 	}
+	
+	private boolean isTransition(String from, String to){
+		if(from.equalsIgnoreCase("A")&&to.equalsIgnoreCase("G"))return true;
+		if(from.equalsIgnoreCase("G")&&to.equalsIgnoreCase("A"))return true;
+		if(from.equalsIgnoreCase("C")&&to.equalsIgnoreCase("T"))return true;
+		if(from.equalsIgnoreCase("T")&&to.equalsIgnoreCase("C"))return true;
+		return false;
+	}
+	
+	public double getWMS0(int Bias, double WMS1, double WMS2, double WMS3){
+		WMS1=WMS1*(174+(Bias*58));
+		WMS2=WMS2*(176+(Bias*60));
+		WMS3=WMS3*(176+(Bias*60));
+		return (WMS1+WMS2+WMS3)/((174+(Bias*58))+176+(Bias*60)+176+(Bias*60));
+	}
+	
 	public double getMS0(double MS1, double MS2, double MS3){
 		MS1=MS1*174;
 		MS2=MS2*176;
 		MS3=MS3*176;
 		return(MS1+MS2+MS3)/(174+176+176);
 	}
+	
 	public double getfMS(double rMS, double lMS){
 		rMS=rMS*232;
 		lMS=lMS*232;
