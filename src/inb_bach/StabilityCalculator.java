@@ -6,10 +6,12 @@ import Objects.GeneCode;
 public class StabilityCalculator {
 	private GeneCode Code;
 	private String[]Bases={"T","C","A","G"};
-	private boolean baseweighting=false;
-	private double[] baseWeights;
-	private boolean tripletWeighting=false;
-	private double[][][] tripletWeights;
+	private boolean baseAprioriWeighting=false;
+	private double[] baseAprioriWeights;
+	private boolean tripletaPrioriWeighting=false;
+	private double[][][] tripletAprioriWeights;
+	private boolean tripletTransitionWeighting=false;
+	private double[][][][][]tripletTransitionWeights;
 	private int Bias=1;
 	/* Deviationmode:
 	 * 1=MS1 - Default
@@ -19,25 +21,39 @@ public class StabilityCalculator {
 	public StabilityCalculator(GeneCode Code){
 		this.Code=Code;
 	}
+	//Changes the Code used for Calculations
 	public void ChangeCode(String[] Mapping){
 		Code.changeCode(Mapping);
 	}
-	public void setBaseWeighting(double[] weighting){
-		baseweighting=true;
-		baseWeights=weighting;
+	//Changes the a Priori Weights for single Bases
+	public void setBaseAprioriWeighting(double[] weighting){
+		baseAprioriWeighting=true;
+		baseAprioriWeights=weighting;
 	}
-	public void setTripletWeighting(double[][][] weighting){
-		tripletWeighting=true;
-		tripletWeights=weighting;
+	//Changes the a Priori Weights for Triplets
+	public void setTripletAprioriWeighting(double[][][] weighting){
+		tripletaPrioriWeighting=true;
+		tripletAprioriWeights=weighting;
 	}
+	//Changes the Triplet-Transition Matrix used for Shift Calculations
+	public void setTripletTransitionWeighting(double[][][][][] weighting){
+		tripletTransitionWeighting=true;
+		tripletTransitionWeights=weighting;
+	}
+	
+	//Changes the Transition/Transversion Bias Weighting
 	public void setTransitionTransversionBias(int Bias){
 		this.Bias=Bias;
 	}
 	
-	
+	//Returns Deviations calculated with all current set Parameters
+	//Only for single base Mutations
+	//1=MS1
+	//2=MS2
+	//3=MS3
 	public double get_BaseDeviation(int Modus){
 		if(!(Modus>=1&&Modus<=3)){
-			System.out.println("Fehlerhafter Modus: Zahlen von 1-3 erlaubt.");
+			System.out.println("Bad Mode, Allowed: 1-3");
 			return 0;
 		}
 		double deviation=0.0;
@@ -48,7 +64,7 @@ public class StabilityCalculator {
 				for (int k=0;k<4;k++){
 					String c=Bases[k];
 					String Amino=Code.getAminoAcid(a+b+c);
-					if (Amino.length()!=3)continue; //Filtert Stop Codons
+					if (Amino.length()!=3)continue; //Filters Stop Codons
 					double Polar1=Constants.getPolarReq(Amino);
 					Double Diff=0.0;
 					for (int m=0;m<4;m++){
@@ -65,14 +81,14 @@ public class StabilityCalculator {
 							Amino2=Code.getAminoAcid(a+b+x);
 							break;
 						}
-						if (Amino2.length()!=3)continue; //Filtert Stop Codons
+						if (Amino2.length()!=3)continue; //Filters Stop Codons
 						double Polar2=Constants.getPolarReq(Amino2);
 						double difference=(Polar1-Polar2)*(Polar1-Polar2);
-						if (baseweighting){
-							difference=difference*baseWeights[m];
+						if (baseAprioriWeighting){
+							difference=difference*baseAprioriWeights[m];
 						}
-						if (tripletWeighting){
-							difference=difference*tripletWeights[i][j][k];
+						if (tripletaPrioriWeighting){
+							difference=difference*tripletAprioriWeights[i][j][k];
 						}
 						if(Bias!=1){
 							String from="";
@@ -104,7 +120,6 @@ public class StabilityCalculator {
 			}else{
 				deviation=deviation/(174+(Bias*58));
 			}
-			//System.out.println("MS1: "+deviation );
 			break;
 		case 2:
 			if (Bias==1){
@@ -112,7 +127,6 @@ public class StabilityCalculator {
 			}else{
 				deviation=deviation/(176+(Bias*60));
 			}
-			//System.out.println("MS2: "+deviation );
 			break;
 		case 3:
 			if (Bias==1){
@@ -120,13 +134,12 @@ public class StabilityCalculator {
 			}else{
 				deviation=deviation/(176+(Bias*60));
 			}
-			//System.out.println("MS3: "+deviation );
 			break;
 		}
 		return deviation;
 	}
-	
-	//1=Rechts (+1), 2=Links (-1)
+	//returns deviation for Shift Mutations
+	//1=Right (+1), 2=Left (-1)
 	public double get_ShiftDeviation(int Modus){
 		if(!(Modus>=1&&Modus<=2)){
 			System.out.println("Fehlerhafter Modus: Zahlen von 1-3 erlaubt.");
@@ -157,32 +170,31 @@ public class StabilityCalculator {
 						if (Amino2.length()!=3)continue; //Filtert Stop Codons
 						double Polar2=Constants.getPolarReq(Amino2);
 						double difference=(Polar1-Polar2)*(Polar1-Polar2);
-						if (baseweighting){
-							difference=difference*baseWeights[m];
+						if (tripletaPrioriWeighting){
+							difference=difference*tripletAprioriWeights[i][j][k];
 						}
-						if (tripletWeighting){
-							difference=difference*tripletWeights[i][j][k];
+						if(tripletTransitionWeighting){
+							switch(Modus){
+							case 1:
+								difference=difference*tripletTransitionWeights[i][j][k][m][1];
+								break;
+							case 2:
+								difference=difference*tripletTransitionWeights[i][j][k][m][0];
+								break;
+							}
 						}
-						
 						Diff+=difference;
 					}
 					deviation=deviation+Diff;
 				}
 			}
 		}
-		switch (Modus){
-		case 1:
-			deviation=deviation/232;
-			//System.out.println("rMS: "+deviation );
-			break;
-		case 2:
-			deviation=deviation/232;
-			//System.out.println("lMS: "+deviation );
-			break;
-		}
+		//232 Possible Mutations...
+		deviation=deviation/232;
 		return deviation;
 	}
 	
+	//returns true if the Mutation was a Transition
 	private boolean isTransition(String from, String to){
 		if(from.equalsIgnoreCase("A")&&to.equalsIgnoreCase("G"))return true;
 		if(from.equalsIgnoreCase("G")&&to.equalsIgnoreCase("A"))return true;

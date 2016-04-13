@@ -123,16 +123,16 @@ public class SequenceStats {
 			for(int j=0;j<4;j++){
 				for(int k=0;k<4;k++){
 					for(int l=0;l<4;l++){
-						TripletTransition[i][j][k][l][0]=((double)rawData[i][j][k][l][0]/(double)overallCountFront)*64;
-						TripletTransition[i][j][k][l][1]=((double)rawData[i][j][k][l][1]/(double)overallCountAfter)*64;
+						TripletTransition[i][j][k][l][0]=((double)rawData[i][j][k][l][0]/(double)overallCountFront)*256;
+						TripletTransition[i][j][k][l][1]=((double)rawData[i][j][k][l][1]/(double)overallCountAfter)*256;
 						sumFront+=TripletTransition[i][j][k][l][0];
 						sumAfter+=TripletTransition[i][j][k][l][1];
 					}
 				}
 			}
 		}
-		sumFront=sumFront/64;
-		sumAfter=sumAfter/64;
+		sumFront=sumFront/256;
+		sumAfter=sumAfter/256;
 		System.out.println("Triplet Transition Average: Front:"+sumFront+" After:"+sumAfter);
 	}
 	private void calculateRawData(){

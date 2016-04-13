@@ -25,8 +25,9 @@ import Objects.SequenceStats;
 public class MainClass {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
 	static GenBankConnection conn=new GenBankConnection();
-	public static double[] factors;
-	public static double[][][] tweights;
+	public static double[] baseAprioriWeights;
+	public static double[][][] tripletAprioriWeights;
+	public static double[][][][][]tripletTransitionWeights;
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
@@ -36,49 +37,67 @@ public class MainClass {
 		// 51847843 = 158 MB Mixed Chromosom 7
 		// 568815597 = 250 MB Mixed Chromosom 1
 		// 671162122 = 32 MB Drosophila melanogaster chromosome 2R
-		//DNASequence DNA=conn.LoadFastaFile(568815597);
-		//stat.Statistics(DNA.getSequenceAsString());
-		//double[][] C1=stat.getMatrix(DNA.getSequenceAsString());
-//		double Chr1[][]={
-//			    {0.2594,0.3422,0.3489,0.0494},
-//			    {0.2059,0.3279,0.2164,0.2498},
-//			    {0.1729,0.2553,0.3265,0.2452},
-//			    {0.2109,0.2417,0.2878,0.2596}
-//			};
-//		
 //		List<DNASequence> Mixed=conn.LoadMixedFile();
 //		StringBuilder builder = new StringBuilder();
 //		for(DNASequence seq : Mixed) {		    
 //		builder.append(seq.getSequenceAsString());
 //    	}
+		
 //		String MixedSeq=builder.toString();
 //		System.out.println("Mixed Length: "+MixedSeq.length());
 //		DNASequence Seq1=conn.LoadFastaFile(47118301);
-//		double[][] Seq1Matrix=stat.getMatrix(Seq1.getSequenceAsString());
 //		
 //		DNASequence Seq2=conn.LoadFastaFile(51847843);
-//		double[][] Seq2Matrix=stat.getMatrix(Seq2.getSequenceAsString());
 //		DNASequence DNA=conn.LoadFastaFile(568815597);
-//		stat.Statistics(DNA.getSequenceAsString());
-//		stat.getMatrix(DNA.getSequenceAsString());
-//		stat.MatrixDiff(Seq1Matrix, Seq2Matrix);
-		
-		
-//		List<DNASequence> Mixed=conn.LoadMixedFile();
-//		StringBuilder builder = new StringBuilder();
-//		for(DNASequence seq : Mixed) {		    
-//			builder.append(seq.getSequenceAsString());
-//    	}
-//		String MixedSeq=builder.toString();
+
+		List<DNASequence> Mixed=conn.LoadMixedFile();
+		StringBuilder builder = new StringBuilder();
+		for(DNASequence seq : Mixed) {		    
+			builder.append(seq.getSequenceAsString());
+    	}
+		String MixedSeq=builder.toString();
 //		double[] w=stat.getNucleotideDistribution(MixedSeq);
 //		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
 //		factors=tempfactors;
 //		tweights=stat.getTripletDistribution(MixedSeq);
 		
-		DNASequence Seq1=conn.LoadFastaFile(568815597);
-		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-		factors=Stat.getBase_aPriori();
-		tweights=Stat.getTriplet_aPriori();
+		//DNASequence Seq1=conn.LoadFastaFile(568815597);
+		SequenceStats Stat=new SequenceStats(MixedSeq);
+		baseAprioriWeights=Stat.getBase_aPriori();
+		tripletAprioriWeights=Stat.getTriplet_aPriori();
+		tripletTransitionWeights=Stat.getTripletTransition();
+		System.out.println("No Weighting");
+		StabilityCalculator Stab=new StabilityCalculator(new GeneCode());
+		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
+		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
+		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
+		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
+		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
+		
+		System.out.println("Triplet Apriori Weighting");
+		Stab.setTripletAprioriWeighting(tripletAprioriWeights);
+		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
+		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
+		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
+		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
+		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
+		
+		System.out.println("Bias Weighting: 2+Triplet Apriori");
+		Stab.setTransitionTransversionBias(2);
+		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
+		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
+		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
+		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
+		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
+		
+		
+		Stab.setTripletTransitionWeighting(tripletTransitionWeights);
+		System.out.println("Triplet Transition Weighting");
+		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
+		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
+		
+		if(true)return;
+
 
 		
 		
@@ -86,23 +105,6 @@ public class MainClass {
 		P.generateCodes();
 		P.calculateValues();
 		if(true)return;
-		
-		GeneCode g=new GeneCode();
-		StabilityCalculator S=new StabilityCalculator(g);
-		
-		System.out.println("####### Ohne Gewichtung ######");
-		
-		
-		S.setBaseWeighting(factors);
-		System.out.println("####### Mit Basen-Gewichtung ######");
-		
-		
-		S.setTripletWeighting(tweights);
-		System.out.println("####### Mit Basen- und Triplet-Gewichtung ######");
-		
-
-		
-
 		
 
 		//###################################################################
@@ -119,9 +121,6 @@ public class MainClass {
 	 *   2.2 + Mit Triplet-a-priori-WS
 	 *   2.3 Mit WS bzgl Rechts-Links shift -> Macht keinen Unterschied da das Symmetrisch ist.
 	 *   
-	 *   TODO
-	 *   Transition Matrix für Shift einbinden
-	 *   Multithreaded Calculation für Stabilitäten (File als Parameter)
 	 *   
 	 * 
 	 *  Transition matrix Chromosom 1
