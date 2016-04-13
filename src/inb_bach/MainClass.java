@@ -77,7 +77,9 @@ public class MainClass {
 		
 		DNASequence Seq1=conn.LoadFastaFile(568815597);
 		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-		if(true)return;
+		factors=Stat.getBase_aPriori();
+		tweights=Stat.getTriplet_aPriori();
+
 		
 		
 		CodePermutation P=new CodePermutation();
@@ -89,27 +91,15 @@ public class MainClass {
 		StabilityCalculator S=new StabilityCalculator(g);
 		
 		System.out.println("####### Ohne Gewichtung ######");
-		System.out.println("MS1: "+S.get_Deviation(1) );
-		System.out.println("MS2: "+S.get_Deviation(2) );
-		System.out.println("MS3: "+S.get_Deviation(3) );
-		System.out.println("rMS: "+S.get_Deviation(4) );
-		System.out.println("lMS: "+S.get_Deviation(5) );
+		
 		
 		S.setBaseWeighting(factors);
 		System.out.println("####### Mit Basen-Gewichtung ######");
-		System.out.println("MS1: "+S.get_Deviation(1) );
-		System.out.println("MS2: "+S.get_Deviation(2) );
-		System.out.println("MS3: "+S.get_Deviation(3) );
-		System.out.println("rMS: "+S.get_Deviation(4) );
-		System.out.println("lMS: "+S.get_Deviation(5) );
+		
 		
 		S.setTripletWeighting(tweights);
 		System.out.println("####### Mit Basen- und Triplet-Gewichtung ######");
-		System.out.println("MS1: "+S.get_Deviation(1) );
-		System.out.println("MS2: "+S.get_Deviation(2) );
-		System.out.println("MS3: "+S.get_Deviation(3) );
-		System.out.println("rMS: "+S.get_Deviation(4) );
-		System.out.println("lMS: "+S.get_Deviation(5) );
+		
 
 		
 
