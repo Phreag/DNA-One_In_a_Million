@@ -20,10 +20,10 @@ import org.biojava.nbio.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava.nbio.core.sequence.io.ProteinSequenceCreator;
 
 import Objects.GeneCode;
+import Objects.SequenceStats;
 
 public class MainClass {
 	static DecimalFormat df = new DecimalFormat("0.0000"); 
-	static StatisticsCalculator stat=new StatisticsCalculator();
 	static GenBankConnection conn=new GenBankConnection();
 	public static double[] factors;
 	public static double[][][] tweights;
@@ -75,13 +75,10 @@ public class MainClass {
 //		factors=tempfactors;
 //		tweights=stat.getTripletDistribution(MixedSeq);
 		
-		
-		
 		DNASequence Seq1=conn.LoadFastaFile(568815597);
-		double[] w=stat.getNucleotideDistribution(Seq1.getSequenceAsString());
-		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
-		factors=tempfactors;
-		tweights=stat.getTripletDistribution(Seq1.getSequenceAsString());
+		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
+		if(true)return;
+		
 		
 		CodePermutation P=new CodePermutation();
 		P.generateCodes();

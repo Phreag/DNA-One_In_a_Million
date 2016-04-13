@@ -102,6 +102,6 @@ Code#	MS1				MS2				MS3				rMS				lMS				Summe
 354395	6,3126817039	8,4135570884	2,3821347337	5,0086706983	4,7397378240	26,8567820484
 (2 Bessere Codes)
 
-rMS/lMS: 44 Bessere Codes
+rMS/lMS: 44 Bessere Codes (Regine: 267)
 
 
