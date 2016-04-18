@@ -50,6 +50,11 @@ public class MainClass {
 //		DNASequence Seq2=conn.LoadFastaFile(51847843);
 //		DNASequence DNA=conn.LoadFastaFile(568815597);
 
+		CodePermutation P=new CodePermutation();
+		//P.generateCodes();
+		P.importCodes();
+		if(true)return;
+		
 		List<DNASequence> Mixed=conn.LoadMixedFile();
 		StringBuilder builder = new StringBuilder();
 		for(DNASequence seq : Mixed) {		    
@@ -101,10 +106,7 @@ public class MainClass {
 
 		
 		
-		CodePermutation P=new CodePermutation();
-		P.generateCodes();
-		P.calculateValues();
-		if(true)return;
+		
 		
 
 		//###################################################################

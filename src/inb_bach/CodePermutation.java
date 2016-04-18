@@ -18,6 +18,8 @@ import Objects.GeneCode;
 
 public class CodePermutation {
 	String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
+	String[] RegC={"Phe","Leu","Ile","Met","Val","Ser","Pro","Thr","Ala","Tyr","His","Gln","Asn","Lys","Asp","Glu","Cys","Trp","Arg","Gly"};
+	int[] DiffCode={16,   -1,   3,    3,     7,    5,   -5,    0,    4,    8,    -8, -8,    -4,    -4,   -1,   -1,   2,    2,    -14,   -4};
 	private int CodeCount=0;
 	private String[] ValueBuffer;
 	private List<String> CodeBuffer;
@@ -54,6 +56,38 @@ public class CodePermutation {
 	    	}
 	    	System.out.println("Threads finished: "+(++ThreadsFinished));
 	    }
+	}
+	
+	private String[] ConvertCode(String[] Import){
+		String[]C=new String[20];
+		for (int i=0;i<20;i++){
+			C[i+DiffCode[i]]=Import[i];
+		}
+		return C;
+	}
+	
+	public void importCodes(){
+		BufferedReader br;
+		try {
+			codes=new FileWriter("data/codes.txt");
+			br = new BufferedReader(new FileReader("data/CodeImport.txt"));
+			String line = null;
+			CodeCount=0;
+	    	while ((line = br.readLine()) != null) {
+		    	String[]Temp=line.split(",");
+		    	String[]ImportedCode=new String[20];
+		    	for (int i=0;i<20;i++){
+		    		ImportedCode[i]=RegC[Integer.parseInt(Temp[i])-1];
+		    	}
+		    	writeCodeLine(ConvertCode(ImportedCode));
+	    	}
+	    	br.close();
+	    	codes.close();
+		} catch (Exception e) {
+			System.out.println("FEHLER:");
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	public void calculateValues(){
