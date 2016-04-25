@@ -35,8 +35,9 @@ public class CodePermutation {
 	    	GeneCode g=new GeneCode();
 	    	//Weighting Parameters here
 	    	StabilityCalculator S=new StabilityCalculator(g);
-	    	//S.setBaseWeighting(MainClass.factors);
-	    	//S.setTripletWeighting(MainClass.tweights);
+	    	//S.setBaseAprioriWeighting(MainClass.baseAprioriWeights);
+	    	//S.setTripletAprioriWeighting(MainClass.tripletAprioriWeights);
+	    	S.setTripletTransitionWeighting(MainClass.tripletTransitionWeights);
 	    	while (true){
 	    		int currentCode=getNextValue();
 	    		

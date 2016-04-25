@@ -50,27 +50,30 @@ public class MainClass {
 //		DNASequence Seq2=conn.LoadFastaFile(51847843);
 //		DNASequence DNA=conn.LoadFastaFile(568815597);
 
-		CodePermutation P=new CodePermutation();
-		//P.generateCodes();
-		P.importCodes();
-		if(true)return;
-		
-		List<DNASequence> Mixed=conn.LoadMixedFile();
-		StringBuilder builder = new StringBuilder();
-		for(DNASequence seq : Mixed) {		    
-			builder.append(seq.getSequenceAsString());
-    	}
-		String MixedSeq=builder.toString();
+				
+//		List<DNASequence> Mixed=conn.LoadMixedFile();
+//		StringBuilder builder = new StringBuilder();
+//		for(DNASequence seq : Mixed) {		    
+//			builder.append(seq.getSequenceAsString());
+//    	}
+//		String MixedSeq=builder.toString();
 //		double[] w=stat.getNucleotideDistribution(MixedSeq);
 //		double[] tempfactors={w[0]/0.25,w[1]/0.25,w[2]/0.25,w[3]/0.25};
 //		factors=tempfactors;
 //		tweights=stat.getTripletDistribution(MixedSeq);
 		
-		//DNASequence Seq1=conn.LoadFastaFile(568815597);
-		SequenceStats Stat=new SequenceStats(MixedSeq);
+		DNASequence Seq1=conn.LoadFastaFile(568815597);
+		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
 		baseAprioriWeights=Stat.getBase_aPriori();
 		tripletAprioriWeights=Stat.getTriplet_aPriori();
 		tripletTransitionWeights=Stat.getTripletTransition();
+		
+		CodePermutation P=new CodePermutation();
+		P.calculateValues();
+		//P.importCodes();
+		if(true)return;
+
+		
 		System.out.println("No Weighting");
 		StabilityCalculator Stab=new StabilityCalculator(new GeneCode());
 		System.out.println("MS1 "+Stab.get_BaseDeviation(1));

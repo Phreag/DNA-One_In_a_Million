@@ -142,7 +142,7 @@ public class StabilityCalculator {
 	//1=Right (+1), 2=Left (-1)
 	public double get_ShiftDeviation(int Modus){
 		if(!(Modus>=1&&Modus<=2)){
-			System.out.println("Fehlerhafter Modus: Zahlen von 1-3 erlaubt.");
+			System.out.println("Bad Mode, Allowed: 1-2");
 			return 0;
 		}
 		double deviation=0.0;
