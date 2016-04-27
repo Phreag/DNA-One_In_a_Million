@@ -33,15 +33,10 @@ public class CodePermutation {
 	private Random rnd;
 	private int Threads=10;
 	private int ThreadsFinished=0;
-	
 	public class ThreadedCalculator extends Thread {
 	    public void run() {
 	    	GeneCode g=new GeneCode();
-	    	//Weighting Parameters here
 	    	StabilityCalculator S=new StabilityCalculator(g);
-	    	//S.setBaseAprioriWeighting(MainClass.baseAprioriWeights);
-	    	//S.setTripletAprioriWeighting(MainClass.tripletAprioriWeights);
-	    	//S.setTripletTransitionWeighting(MainClass.tripletTransitionWeights);
 	    	while (true){
 	    		int currentCode=getNextValue();
 	    		

@@ -27,36 +27,32 @@ public class StabilityCalculator {
 	 */
 	public StabilityCalculator(GeneCode Code){
 		this.Code=Code;
+		this.Bias=MainClass.TransitionTransversionBias;
+		//Changes the a Priori Weights for single Bases
+		if (MainClass.baseAprioriEnabled){
+			baseAprioriWeighting=true;
+			baseAprioriWeights=MainClass.baseAprioriWeights;
+		}
+		//Changes the a Priori Weights for Triplets
+		if (MainClass.tripletAprioriEnabled){
+			tripletaPrioriWeighting=true;
+			tripletAprioriWeights=MainClass.tripletAprioriWeights;
+		}
+		//Changes the Base-Transition Matrix
+		if (MainClass.baseTransitionEnabled){
+			baseTransitionWeighting=true;
+			baseTransitionWeights=MainClass.baseTransitionWeights;
+		}
+		//Changes the Triplet-Transition Matrix used for Shift Calculations
+		if (MainClass.tripletTransitionEnabled){
+			tripletTransitionWeighting=true;
+			tripletTransitionWeights=MainClass.tripletTransitionWeights;
+		}
 	}
 	//Changes the Code used for Calculations
 	public void ChangeCode(String[] Mapping){
 		Code.changeCode(Mapping);
 	}
-	//Changes the a Priori Weights for single Bases
-	public void setBaseAprioriWeighting(double[] weighting){
-		baseAprioriWeighting=true;
-		baseAprioriWeights=weighting;
-	}
-	//Changes the a Priori Weights for Triplets
-	public void setTripletAprioriWeighting(double[][][] weighting){
-		tripletaPrioriWeighting=true;
-		tripletAprioriWeights=weighting;
-	}
-	//Changes the Base-Transition Matrix
-	public void setBaseTransitionWeighting(double[][] weighting){
-		baseTransitionWeighting=true;
-		baseTransitionWeights=weighting;
-	}
-	//Changes the Triplet-Transition Matrix used for Shift Calculations
-	public void setTripletTransitionWeighting(double[][][][][] weighting){
-		tripletTransitionWeighting=true;
-		tripletTransitionWeights=weighting;
-	}
-	//Changes the Transition/Transversion Bias Weighting
-	public void setTransitionTransversionBias(int Bias){
-		this.Bias=Bias;
-	}
-	
 	//Returns Deviations calculated with all current set Parameters
 	//Only for single base Mutations
 	//1=MS1
@@ -186,6 +182,16 @@ public class StabilityCalculator {
 						}
 						if (tripletaPrioriWeighting){
 							difference=difference*tripletAprioriWeights[i][j][k];
+						}
+						if (baseTransitionWeighting){
+							switch(Modus){
+							case 1:
+								difference=difference*baseTransitionWeights[k][m];
+								break;
+							case 2:
+								difference=difference*baseTransitionWeights[m][i];
+								break;
+							}
 						}
 						if(tripletTransitionWeighting){
 							switch(Modus){

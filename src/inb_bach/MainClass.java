@@ -27,7 +27,13 @@ public class MainClass {
 	static GenBankConnection conn=new GenBankConnection();
 	public static double[] baseAprioriWeights;
 	public static double[][][] tripletAprioriWeights;
+	public static double[][] baseTransitionWeights;
 	public static double[][][][][]tripletTransitionWeights;
+	public static boolean baseAprioriEnabled=false;
+	public static boolean tripletAprioriEnabled=false;
+	public static boolean baseTransitionEnabled=false;
+	public static boolean tripletTransitionEnabled=false;
+	public static int TransitionTransversionBias=1;
 	public static void main (String[] args){
 		//###################################################################
 		//#########################   DEBUG AREA   ##########################
@@ -68,10 +74,10 @@ public class MainClass {
 		baseAprioriWeights=Stat.getBase_aPriori();
 		tripletAprioriWeights=Stat.getTriplet_aPriori();
 		tripletTransitionWeights=Stat.getTripletTransition();
+		baseTransitionWeights=Stat.getBaseTransition();
 		
 		CodePermutation P=new CodePermutation();
-		CodeEvaluation E= new CodeEvaluation(P.calculateValues());
-		E.countBetterCodes();
+		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 
 		
 

@@ -8,7 +8,7 @@ public class CodeEvaluation {
 	public CodeEvaluation(double[][] values){
 		this.values=values;
 	}
-	public void countBetterCodes(){
+	public int[] countBetterCodes(){
 		System.out.println("Evaluating Results and counting better codes found...");
 		int[] betterCodes=new int[values[0].length+1];
 		for (int i=0;i<values.length;i++){
@@ -24,6 +24,7 @@ public class CodeEvaluation {
 		}
 		System.out.println("Number of better codes found:");
 		System.out.println(Arrays.toString(betterCodes));
+		return betterCodes;
 	}
 
 }
