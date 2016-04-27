@@ -62,6 +62,7 @@ public class MainClass {
 //		factors=tempfactors;
 //		tweights=stat.getTripletDistribution(MixedSeq);
 		
+		
 		DNASequence Seq1=conn.LoadFastaFile(568815597);
 		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
 		baseAprioriWeights=Stat.getBase_aPriori();
@@ -69,47 +70,9 @@ public class MainClass {
 		tripletTransitionWeights=Stat.getTripletTransition();
 		
 		CodePermutation P=new CodePermutation();
-		P.calculateValues();
-		//P.importCodes();
-		if(true)return;
+		CodeEvaluation E= new CodeEvaluation(P.calculateValues());
+		E.countBetterCodes();
 
-		
-		System.out.println("No Weighting");
-		StabilityCalculator Stab=new StabilityCalculator(new GeneCode());
-		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
-		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
-		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
-		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
-		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
-		
-		System.out.println("Triplet Apriori Weighting");
-		Stab.setTripletAprioriWeighting(tripletAprioriWeights);
-		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
-		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
-		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
-		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
-		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
-		
-		System.out.println("Bias Weighting: 2+Triplet Apriori");
-		Stab.setTransitionTransversionBias(2);
-		System.out.println("MS1 "+Stab.get_BaseDeviation(1));
-		System.out.println("MS2 "+Stab.get_BaseDeviation(2));
-		System.out.println("MS3 "+Stab.get_BaseDeviation(3));
-		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
-		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
-		
-		
-		Stab.setTripletTransitionWeighting(tripletTransitionWeights);
-		System.out.println("Triplet Transition Weighting");
-		System.out.println("rMS "+Stab.get_ShiftDeviation(1));
-		System.out.println("fMS "+Stab.get_ShiftDeviation(2));
-		
-		if(true)return;
-
-
-		
-		
-		
 		
 
 		//###################################################################

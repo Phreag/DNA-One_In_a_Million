@@ -6,12 +6,19 @@ import Objects.GeneCode;
 public class StabilityCalculator {
 	private GeneCode Code;
 	private String[]Bases={"T","C","A","G"};
+	
 	private boolean baseAprioriWeighting=false;
 	private double[] baseAprioriWeights;
+	
 	private boolean tripletaPrioriWeighting=false;
 	private double[][][] tripletAprioriWeights;
+	
+	private boolean baseTransitionWeighting=false;
+	private double[][] baseTransitionWeights;
+	
 	private boolean tripletTransitionWeighting=false;
 	private double[][][][][]tripletTransitionWeights;
+	
 	private int Bias=1;
 	/* Deviationmode:
 	 * 1=MS1 - Default
@@ -35,12 +42,16 @@ public class StabilityCalculator {
 		tripletaPrioriWeighting=true;
 		tripletAprioriWeights=weighting;
 	}
+	//Changes the Base-Transition Matrix
+	public void setBaseTransitionWeighting(double[][] weighting){
+		baseTransitionWeighting=true;
+		baseTransitionWeights=weighting;
+	}
 	//Changes the Triplet-Transition Matrix used for Shift Calculations
 	public void setTripletTransitionWeighting(double[][][][][] weighting){
 		tripletTransitionWeighting=true;
 		tripletTransitionWeights=weighting;
 	}
-	
 	//Changes the Transition/Transversion Bias Weighting
 	public void setTransitionTransversionBias(int Bias){
 		this.Bias=Bias;
@@ -170,6 +181,9 @@ public class StabilityCalculator {
 						if (Amino2.length()!=3)continue; //Filtert Stop Codons
 						double Polar2=Constants.getPolarReq(Amino2);
 						double difference=(Polar1-Polar2)*(Polar1-Polar2);
+						if (baseAprioriWeighting){
+							difference=difference*baseAprioriWeights[m];
+						}
 						if (tripletaPrioriWeighting){
 							difference=difference*tripletAprioriWeights[i][j][k];
 						}
@@ -221,5 +235,13 @@ public class StabilityCalculator {
 		rMS=rMS*232;
 		lMS=lMS*232;
 		return(rMS+lMS)/(232+232);
+	}
+	public double getGMS(double MS1, double MS2, double MS3, double rMS, double lMS){
+		MS1=MS1*174;
+		MS2=MS2*176;
+		MS3=MS3*176;
+		rMS=rMS*232;
+		lMS=lMS*232;
+		return(MS1+MS2+MS3+rMS+lMS)/(174+176+176+232+232);
 	}
 }

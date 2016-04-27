@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,8 +24,9 @@ public class CodePermutation {
 	String[] RegC={"Phe","Leu","Ile","Met","Val","Ser","Pro","Thr","Ala","Tyr","His","Gln","Asn","Lys","Asp","Glu","Cys","Trp","Arg","Gly"};
 	int[] DiffCode={16,   -1,   3,    3,     7,    5,   -5,    0,    4,    8,    -8, -8,    -4,    -4,   -1,   -1,   2,    2,    -14,   -4};
 	private int CodeCount=0;
-	private String[] ValueBuffer;
-	private List<String> CodeBuffer;
+	private double[][] ValueBuffer;
+	private int[] progress;
+	private String[] CodeBuffer;
 	private int nextValue=0;
 	private FileWriter codes;
 	private FileWriter values;
@@ -37,23 +41,25 @@ public class CodePermutation {
 	    	StabilityCalculator S=new StabilityCalculator(g);
 	    	//S.setBaseAprioriWeighting(MainClass.baseAprioriWeights);
 	    	//S.setTripletAprioriWeighting(MainClass.tripletAprioriWeights);
-	    	S.setTripletTransitionWeighting(MainClass.tripletTransitionWeights);
+	    	//S.setTripletTransitionWeighting(MainClass.tripletTransitionWeights);
 	    	while (true){
 	    		int currentCode=getNextValue();
 	    		
 	    		//if (currentCode%10000==0)System.out.println("Generating Code "+currentCode);
-	    		if(currentCode>=CodeBuffer.size())break;
-	    		String[] rCode=CodeBuffer.get(currentCode).split(" ")[1].split("~");
+	    		if(currentCode>=CodeBuffer.length)break;
+	    		String[] rCode=CodeBuffer[currentCode].split(" ")[1].split("~");
 	    		g.changeCode(rCode);
-	    		double MS1=S.get_BaseDeviation(1);
-		    	double MS2=S.get_BaseDeviation(2);
-		    	double MS3=S.get_BaseDeviation(3);
-		    	double rMS=S.get_ShiftDeviation(1);
-		    	double lMS=S.get_ShiftDeviation(2);
-		    	double MS0=S.getMS0(MS1, MS2, MS3);
-		    	double fMS=S.getfMS(rMS, lMS);
-	    		String Line=MS1+","+MS2+","+MS3+","+MS0+","+rMS+","+lMS+","+fMS;
-	    		ValueBuffer[currentCode]=Line;
+	    		//writes the dataset columns
+	    		ValueBuffer[currentCode][0]=S.get_BaseDeviation(1);//MS1
+	    		ValueBuffer[currentCode][1]=S.get_BaseDeviation(2);//MS2
+	    		ValueBuffer[currentCode][2]=S.get_BaseDeviation(3);//MS3
+	    		ValueBuffer[currentCode][3]=S.getMS0(ValueBuffer[currentCode][0], ValueBuffer[currentCode][1], ValueBuffer[currentCode][2]);//MS0
+	    		ValueBuffer[currentCode][4]=S.get_ShiftDeviation(1);//rMS
+	    		ValueBuffer[currentCode][5]=S.get_ShiftDeviation(2);//lMS
+	    		ValueBuffer[currentCode][6]=S.getfMS(ValueBuffer[currentCode][4], ValueBuffer[currentCode][5]);//fMS
+	    		ValueBuffer[currentCode][7]=S.getGMS(ValueBuffer[currentCode][0], ValueBuffer[currentCode][1], ValueBuffer[currentCode][2], ValueBuffer[currentCode][4], ValueBuffer[currentCode][5]);
+	    		//Marks that this dataset if fully computed
+	    		progress[currentCode]=1;
 	    	}
 	    	System.out.println("Threads finished: "+(++ThreadsFinished));
 	    }
@@ -91,33 +97,37 @@ public class CodePermutation {
 		}
 	}
 
-	public void calculateValues(){
+	public double[][] calculateValues(){
 		//Initialize Writer for Value Output
 		try {
 			values=new FileWriter("data/codeValues.csv");
+			Path path = Paths.get("data/CodeImport.txt");
+			int lines = (int) Files.lines(path).count();
+			//Cache all Codes into Buffer
+			CodeBuffer=new String[lines];
+			
 		} catch (IOException e) {
 			System.out.println("FileWriter Error!");
-			return;
+			return null;
 		}
-		
-		//Cache all Codes into Buffer
-		CodeBuffer=new ArrayList<String>();
 		System.out.println("Buffering Codes...");
 		BufferedReader br;
 		try {
+			int currentline=0;
 			br = new BufferedReader(new FileReader("data/Codes.txt"));
 			String line = null;
 	    	while ((line = br.readLine()) != null) {
-	    		CodeBuffer.add(line);
+	    		CodeBuffer[currentline]=line;
+	    		currentline++;
 	    	}
 	    	br.close();
 		} catch (Exception e) {
 			System.out.println("FEHLER: Filereader Error");
-			return;
+			return null;
 		}
 		//Intitalize output Buffer Array
-		ValueBuffer=new String[CodeBuffer.size()];
-		
+		ValueBuffer=new double[CodeBuffer.length][8];
+		progress=new int[CodeBuffer.length];
 		System.out.println("Start calculation with " +Threads+" Threads...");
 		//Start the Calculation Threads
 		for (int i=0;i<Threads;i++){
@@ -132,14 +142,14 @@ public class CodePermutation {
 		
 		//Write Task to save the Results
 		//Sleeps for 10ms if it is too fast
-		for (int i=0;i<CodeBuffer.size();i++){
+		for (int i=0;i<CodeBuffer.length;i++){
 			int timeout=0;
 			boolean repeat=false;
-			if (ValueBuffer[i]==null){
+			if (progress[i]==0){
 				if (ThreadsFinished==Threads)break;
 				try {
 					Thread.sleep(100);
-					if (ValueBuffer[i]!=null)repeat=true;;
+					if (progress[i]!=0)repeat=true;;
 					timeout+=100;
 				} catch (InterruptedException e) {}
 				if (timeout>3000)System.out.println("Timeout: "+timeout);
@@ -153,6 +163,7 @@ public class CodePermutation {
 		try {
 			values.close();
 		} catch (IOException e) {}
+		return ValueBuffer;
 	}
 	private synchronized int getNextValue(){
 		return nextValue++;
@@ -160,10 +171,10 @@ public class CodePermutation {
 	
 	
 	
-	private void writeValueLine(int Number,String Line){
+	private void writeValueLine(int Number,double[] Line){
 		//Writes Value Line To File
 		try {
-			values.write(Number+","+Line+'\n');
+			values.write(Number+" "+Arrays.toString(Line)+'\n');
 		} catch (IOException e) {
 			System.out.println("FileWriter Error on "+Line);
 		}
