@@ -23,16 +23,16 @@ public class CodePermutation {
 	String[] Code={"Leu","Pro","His","Gln","Arg","Ile","Met","Thr","Asn","Lys","Ser","Val","Ala","Asp","Glu","Gly","Phe","Tyr","Cys","Trp"};
 	String[] RegC={"Phe","Leu","Ile","Met","Val","Ser","Pro","Thr","Ala","Tyr","His","Gln","Asn","Lys","Asp","Glu","Cys","Trp","Arg","Gly"};
 	int[] DiffCode={16,   -1,   3,    3,     7,    5,   -5,    0,    4,    8,    -8, -8,    -4,    -4,   -1,   -1,   2,    2,    -14,   -4};
-	private int CodeCount=0;
+	private int CodeCount;
 	private double[][] ValueBuffer;
 	private int[] progress;
 	private String[] CodeBuffer;
-	private int nextValue=0;
+	private int nextValue;
 	private FileWriter codes;
 	private FileWriter values;
 	private Random rnd;
 	private int Threads=10;
-	private int ThreadsFinished=0;
+	private int ThreadsFinished;
 	public class ThreadedCalculator extends Thread {
 	    public void run() {
 	    	GeneCode g=new GeneCode();
@@ -56,7 +56,7 @@ public class CodePermutation {
 	    		//Marks that this dataset if fully computed
 	    		progress[currentCode]=1;
 	    	}
-	    	System.out.println("Threads finished: "+(++ThreadsFinished));
+	    	//System.out.println("Threads finished: "+(++ThreadsFinished));
 	    }
 	}
 	
@@ -93,6 +93,9 @@ public class CodePermutation {
 	}
 
 	public double[][] calculateValues(){
+		CodeCount=0;
+		nextValue=0;
+		ThreadsFinished=0;
 		//Initialize Writer for Value Output
 		try {
 			values=new FileWriter("data/codeValues.csv");
@@ -173,8 +176,7 @@ public class CodePermutation {
 		} catch (IOException e) {
 			System.out.println("FileWriter Error on "+Line);
 		}
-		if (Number%10000==0)System.out.println("Calculated "+Number+" Codes with stabilities");
-
+		if (Number%50000==0)System.out.println("Calculated "+Number+" Codes with stabilities");
 	}
 	
 	//Writes random generated Code line to File
