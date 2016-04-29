@@ -77,59 +77,65 @@ public class MainClass {
 		baseTransitionWeights=Stat.getBaseTransition();
 		tripletTransitionWeights=Stat.getTripletTransition();
 		TransitionTransversionBias=2;
-		CodePermutation P=new CodePermutation();
+		CodeFinder C=new CodeFinder();
+		setWeightings(false,true,false,true);
+//		CodePermutation P=new CodePermutation();
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+		C.RunCodeFinder(50);
+//		
+		//CodePermutation P=new CodePermutation();
 		
-		//Ohne Gewichtung
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		//Eine Aktive
-		setWeightings(true, false, false, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, true, false, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, false, true, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, false, false, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		//Zwei aktive
-		setWeightings(true, true, false, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(true, false, true, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(true, false, false, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, true, true, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, true, false, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, false, true, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		//3 Aktive
-		setWeightings(true, true, true, false);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(true, true, false, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(true, false, true, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		setWeightings(false, true, true, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
-		
-		//4 Aktive
-		setWeightings(true, true, true, true);
-		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		//Ohne Gewichtung
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		//Eine Aktive
+//		setWeightings(true, false, false, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, true, false, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, false, true, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, false, false, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		//Zwei aktive
+//		setWeightings(true, true, false, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(true, false, true, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(true, false, false, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, true, true, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, true, false, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, false, true, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		//3 Aktive
+//		setWeightings(true, true, true, false);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(true, true, false, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(true, false, true, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		setWeightings(false, true, true, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
+//		
+//		//4 Aktive
+//		setWeightings(true, true, true, true);
+//		new CodeEvaluation(P.calculateValues()).countBetterCodes();
 		
 		
 

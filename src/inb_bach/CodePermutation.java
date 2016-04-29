@@ -26,14 +26,14 @@ public class CodePermutation {
 	private int CodeCount;
 	private double[][] ValueBuffer;
 	private int[] progress;
-	private String[] CodeBuffer;
+	private List<String> CodeBuffer;
 	private int nextValue;
 	private FileWriter codes;
 	private FileWriter values;
 	private Random rnd;
 	private int Threads=10;
 	private int ThreadsFinished;
-	public class ThreadedCalculator extends Thread {
+	private class ThreadedCalculator extends Thread {
 	    public void run() {
 	    	GeneCode g=new GeneCode();
 	    	StabilityCalculator S=new StabilityCalculator(g);
@@ -41,8 +41,8 @@ public class CodePermutation {
 	    		int currentCode=getNextValue();
 	    		
 	    		//if (currentCode%10000==0)System.out.println("Generating Code "+currentCode);
-	    		if(currentCode>=CodeBuffer.length)break;
-	    		String[] rCode=CodeBuffer[currentCode].split(" ")[1].split("~");
+	    		if(currentCode>=CodeBuffer.size())break;
+	    		String[] rCode=CodeBuffer.get(currentCode).split(" ")[1].split("~");
 	    		g.changeCode(rCode);
 	    		//writes the dataset columns
 	    		ValueBuffer[currentCode][0]=S.get_BaseDeviation(1);//MS1
@@ -97,13 +97,9 @@ public class CodePermutation {
 		nextValue=0;
 		ThreadsFinished=0;
 		//Initialize Writer for Value Output
+		CodeBuffer=new ArrayList<String>();
 		try {
 			values=new FileWriter("data/codeValues.csv");
-			Path path = Paths.get("data/CodeImport.txt");
-			int lines = (int) Files.lines(path).count();
-			//Cache all Codes into Buffer
-			CodeBuffer=new String[lines];
-			
 		} catch (IOException e) {
 			System.out.println("FileWriter Error!");
 			return null;
@@ -111,12 +107,10 @@ public class CodePermutation {
 		System.out.println("Buffering Codes...");
 		BufferedReader br;
 		try {
-			int currentline=0;
-			br = new BufferedReader(new FileReader("data/Codes.txt"));
+			br = new BufferedReader(new FileReader("data/codes.txt"));
 			String line = null;
 	    	while ((line = br.readLine()) != null) {
-	    		CodeBuffer[currentline]=line;
-	    		currentline++;
+	    		CodeBuffer.add(line);
 	    	}
 	    	br.close();
 		} catch (Exception e) {
@@ -124,8 +118,8 @@ public class CodePermutation {
 			return null;
 		}
 		//Intitalize output Buffer Array
-		ValueBuffer=new double[CodeBuffer.length][8];
-		progress=new int[CodeBuffer.length];
+		ValueBuffer=new double[CodeBuffer.size()][8];
+		progress=new int[CodeBuffer.size()];
 		System.out.println("Start calculation with " +Threads+" Threads...");
 		//Start the Calculation Threads
 		for (int i=0;i<Threads;i++){
@@ -140,7 +134,7 @@ public class CodePermutation {
 		
 		//Write Task to save the Results
 		//Sleeps for 10ms if it is too fast
-		for (int i=0;i<CodeBuffer.length;i++){
+		for (int i=0;i<CodeBuffer.size();i++){
 			int timeout=0;
 			boolean repeat=false;
 			if (progress[i]==0){
