@@ -17,8 +17,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import Objects.GeneCode;
 
@@ -46,7 +48,7 @@ public class CodeFinder {
 			calculateValues();
 			printStatistics(i);
 			if(i==MaxRecursion-1)break;
-			mutateCodes(10000);
+			mutateCodes(1000);
 			clearDuplicates();
 		}
 	}
@@ -104,18 +106,42 @@ public class CodeFinder {
 				}
 			}
 		}
+		//Also include 5-Switch Permutations of the best codes to avoid local minimum
+		for (int i=0;i<bestCodes.size();i++){
+			String[] Original=bestCodes.get(i);
+			String[] Changed=new String[20];
+			System.arraycopy(Original, 0, Changed, 0, 20);
+			int x=0;
+			while (x<5){
+				Random ran = new Random();
+				int x1 = ran.nextInt(20);
+				int x2 = ran.nextInt(20);
+				if (x1!=x2){
+					x++;
+					String[] NewCode=new String[20];
+					System.arraycopy(Changed, 0, NewCode, 0, 20);
+					NewCode[x1]=Changed[x2];
+					NewCode[x2]=Changed[x1];
+					Changed=NewCode;
+				}
+			}
+			mutatedCodes.add(Changed);
+		}
 	}
 	private void printStatistics(int i){
 		double mean=0;
 		double min=999999999;
 		double max=-999999999;
-		for (Entry<String[], Double> entry:GMSValues.entrySet()){
-			double x=entry.getValue();
+		int cnt=0;
+		for (String[] rCode:GMSValues.keySet()){
+			double x=GMSValues.get(rCode);
+			if (x==0)System.out.println("NULL BLAASDFAS");
 			mean=mean+x;
 			if (x<min)min=x;
 			if (x>max)max=x;
+			cnt++;
 		}
-		mean=mean/(double)GMSValues.size();
+		mean=mean/(double)cnt;
 		System.out.println("Minimum: "+min);
 		System.out.println("Maximum: "+max);
 		System.out.println("Mean Value: "+mean);

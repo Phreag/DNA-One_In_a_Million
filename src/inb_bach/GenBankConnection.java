@@ -36,7 +36,7 @@ public class GenBankConnection {
 	}
 	//Loads a FASTA file from /data
 	//If the File doesnt exist it donwloads the sequence from the GenBank.
-		public DNASequence LoadFastaFile (int GeneID){
+		public DNASequence LoadFastaFile (String GeneID){
 			File f=new File("data/"+GeneID+".fasta");
 			if (!f.exists()){
 				System.out.println("Sequence not found. Downloading from GenBank...");
@@ -54,11 +54,18 @@ public class GenBankConnection {
 					System.out.println("Headerend = "+headerend);
 					String Header=File.substring(0, headerend);
 					String Seq= File.substring(headerend);
-				
-					System.out.println("replace M by A... (C also possible)");
-					Seq=Seq.replaceAll("M", "A");
-					System.out.println("replace R by G... (A also possible)");
-					Seq=Seq.replaceAll("R","G");
+					Seq=Seq.replaceAll("U", "");
+					Seq=Seq.replaceAll("R", "");
+					Seq=Seq.replaceAll("Y", "");
+					Seq=Seq.replaceAll("K", "");
+					Seq=Seq.replaceAll("M", "");
+					Seq=Seq.replaceAll("S", "");
+					Seq=Seq.replaceAll("W", "");
+					Seq=Seq.replaceAll("B", "");
+					Seq=Seq.replaceAll("D", "");
+					Seq=Seq.replaceAll("H", "");
+					Seq=Seq.replaceAll("V", "");
+					Seq=Seq.replaceAll("N", "");
 					System.out.println("Writing changes to file...");
 					File=Header+Seq;
 					f.delete();
@@ -90,7 +97,7 @@ public class GenBankConnection {
 			return null;
 		}
 		//Benötigt GI aus Genbank. Sequenz kann dann selbstständig geladen werden.
-		private boolean DownloadFasta(int GeneID){
+		private boolean DownloadFasta(String GeneID){
 			URL u;
 			try {
 				u = new URL("http://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&sendto=on&log$=seqview&db=nuccore&dopt=fasta&sort=&val="+GeneID+"&from=begin&to=end&maxplex=1");
