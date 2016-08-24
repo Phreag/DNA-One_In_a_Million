@@ -122,25 +122,13 @@ public class StabilityCalculator {
 		}
 		switch (Modus){
 		case 1:
-			if (Bias==1){
-				deviation=deviation/174;
-			}else{
-				deviation=deviation/(174+(Bias*58));
-			}
+			deviation=deviation/(174+((Bias-1)*58));
 			break;
 		case 2:
-			if (Bias==1){
-				deviation=deviation/176;
-			}else{
-				deviation=deviation/(176+(Bias*60));
-			}
+			deviation=deviation/(176+((Bias-1)*60));
 			break;
 		case 3:
-			if (Bias==1){
-				deviation=deviation/176;
-			}else{
-				deviation=deviation/(176+(Bias*60));
-			}
+			deviation=deviation/(176+((Bias-1)*60));
 			break;
 		}
 		return deviation;
