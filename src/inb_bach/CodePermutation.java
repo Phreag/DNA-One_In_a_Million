@@ -67,7 +67,7 @@ public class CodePermutation {
 		}
 		return C;
 	}
-	
+	//Method to read exported Matlab codes from R.Geyer
 	public void importCodes(){
 		BufferedReader br;
 		try {
@@ -127,7 +127,6 @@ public class CodePermutation {
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -162,7 +161,7 @@ public class CodePermutation {
 	}
 	
 	
-	
+	//Prints the values to file
 	private void writeValueLine(int Number,double[] Line){
 		//Writes Value Line To File
 		try {

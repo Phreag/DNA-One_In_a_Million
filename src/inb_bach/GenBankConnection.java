@@ -14,6 +14,7 @@ import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 
 public class GenBankConnection {
+	//Allows loading of files containing multiple sequences
 	public List<DNASequence> LoadMixedFile(){
 		File f=new File("data/Mixed.fasta");
 		System.out.println("Loading file Mixed.fasta to memory ("+(f.length()/1024)+" KB)...");
@@ -36,6 +37,7 @@ public class GenBankConnection {
 	}
 	//Loads a FASTA file from /data
 	//If the File doesnt exist it donwloads the sequence from the GenBank.
+	//GeneID can be either an GI (outdated) or accession string
 		public DNASequence LoadFastaFile (String GeneID){
 			File f=new File("data/"+GeneID+".fasta");
 			if (!f.exists()){
@@ -96,7 +98,7 @@ public class GenBankConnection {
 			}
 			return null;
 		}
-		//Benötigt GI aus Genbank. Sequenz kann dann selbstständig geladen werden.
+		//Uses GI or accession to download the Sequence from GenBank
 		private boolean DownloadFasta(String GeneID){
 			URL u;
 			try {

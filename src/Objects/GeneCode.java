@@ -1,6 +1,7 @@
 package Objects;
 
 public class GeneCode {
+	//Each array holds all triplets coding for a specific amino acid.
 	String[]Codes1={"CTT","CTC","CTA","CTG","TTA","TTG"};//Leu
 	String[]Codes2={"CCT","CCC","CCA","CCG"};//Pro
 	String[]Codes3={"CAT","CAC"};//His
@@ -39,7 +40,7 @@ public class GeneCode {
 	}
 	public String getAminoAcid(String Codon){
 		if(Codon.length()!=3){
-			System.out.println("FEHLERHAFTES CODON");
+			System.out.println("Unrecognized Codon");
 			return "ERROR";
 		}
 		for (int i=0;i<20;i++){

@@ -39,10 +39,7 @@ public class CodeFinder {
 	private List<String[]> mutatedCodes;
 	private List<String[]> bestCodes;
 	
-	//190 Switch Methoden um jeweils nur eine Aminosäure zu tauschen
-	//Jeweils beste 10.000 herausnehmen nach GMS
-	//Diese 10.000 permutieren und von Dubletten befreien
-	//Stabilitäten berechnen
+	//runs the code finder algorithm.
 	public void RunCodeFinder(int MaxRecursion){
 		for (int i=0;i<MaxRecursion;i++){
 			calculateValues();
@@ -52,6 +49,7 @@ public class CodeFinder {
 			clearDuplicates();
 		}
 	}
+	//Removes duplicates from the set
 	private void clearDuplicates(){
 		LinkedHashSet<String> duplicateFree;
 		List<String> RawStrings=new ArrayList<String>();
@@ -73,9 +71,10 @@ public class CodeFinder {
 			e.printStackTrace();
 		}
 	}
+	//generates permutations of the n best codes
 	private void mutateCodes(int amount){
 		bestCodes=new ArrayList<String[]>();
-		// Beste codes extrahieren
+		//Extract best codes
 		//System.out.println("First Key"+GMSValues.firstKey());
 		System.out.println("Extracting best Codes...");
 		List<Double> ValuesTemp=new ArrayList<Double>(GMSValues.values());
@@ -91,6 +90,7 @@ public class CodeFinder {
 				bestCodes.add(e.getKey());
 			}
 		}
+		//Permutation
 		System.out.println("Permutating the best codes to find even better ones...");
 		mutatedCodes=new ArrayList<String[]>();
 		mutatedCodes.addAll(bestCodes);
@@ -128,6 +128,7 @@ public class CodeFinder {
 			mutatedCodes.add(Changed);
 		}
 	}
+	//Prints the statistics of the code set on the console
 	private void printStatistics(int i){
 		double mean=0;
 		double min=999999999;
@@ -135,7 +136,7 @@ public class CodeFinder {
 		int cnt=0;
 		for (String[] rCode:GMSValues.keySet()){
 			double x=GMSValues.get(rCode);
-			if (x==0)System.out.println("NULL BLAASDFAS");
+			if (x==0)System.out.println("NULL");
 			mean=mean+x;
 			if (x<min)min=x;
 			if (x>max)max=x;
@@ -147,7 +148,7 @@ public class CodeFinder {
 		System.out.println("Mean Value: "+mean);
 		try {
 	    	 FileWriter fw = new FileWriter(new File("data/GreedyResults.log"), true);
-	    	 if (i==0)fw.write("Datum,    Durchlauf,  Minimum,  Maximum,  Mittelwert "+"\n");
+	    	 if (i==0)fw.write("Date, Run,  Minimum,  Maximum,  Mean "+"\n");
 	    	 fw.write(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date())+", "+i+", ");
 	    	 fw.write(min+", "+max+", "+mean+"\n");
 	    	 fw.close();
@@ -156,7 +157,7 @@ public class CodeFinder {
 			e.printStackTrace();
 		}
 		if(mean<min){
-			System.out.println("FEHLER: Mean zu klein");
+			System.out.println("FEHLER: Mean too small");
 			System.exit(0);
 		}
 		
@@ -182,6 +183,7 @@ public class CodeFinder {
 	    	}
 	    }
 	}
+	//Calculates GMS scores for each code in the set.
 	private boolean calculateValues(){
 		CodeCount=0;
 		nextValue=0;

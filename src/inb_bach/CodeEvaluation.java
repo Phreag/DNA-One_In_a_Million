@@ -13,11 +13,15 @@ public class CodeEvaluation {
 	public CodeEvaluation(double[][] values){
 		this.values=values;
 	}
+	//Counts how many of the code in the current set are better than the first code in the set.
+	//To work properly, the natural code should be the first code.
+	//Needs the generated values matrix.
 	public int[] countBetterCodes(){
 		System.out.println("Evaluating Results and counting better codes found...");
 		int[] betterCodes=new int[values[0].length+1];
 		for (int i=0;i<values.length;i++){
 			boolean isCompleteBetter=true;
+			//Natural code needs to be #1
 			for (int x=0;x<values[0].length;x++){
 				if(values[i][x]<values[0][x]){
 					betterCodes[x]++;
@@ -25,7 +29,10 @@ public class CodeEvaluation {
 					isCompleteBetter=false;
 				}
 			}
-			if(isCompleteBetter)betterCodes[betterCodes.length-1]++;
+			if(isCompleteBetter){
+				betterCodes[betterCodes.length-1]++;
+				System.out.println("Allover Better Code found: "+i);
+			}
 		}
 		System.out.println("Number of better codes found:");
 		System.out.println(Arrays.toString(betterCodes)); 

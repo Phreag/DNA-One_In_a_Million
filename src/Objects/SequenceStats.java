@@ -26,7 +26,7 @@ public class SequenceStats {
 		calculateBaseTransition();
 		calculateTripletTransition();
 	}
-	
+	//Calculates NA weightings
 	private void calculateBase_aPriori(){
 		int[] BaseCount=new int[4];
 		int overallCount=0;
@@ -47,7 +47,7 @@ public class SequenceStats {
 		}
 		System.out.println("Base_aPriori Average: "+(Base_aPriori[0]+Base_aPriori[1]+Base_aPriori[2]+Base_aPriori[3])/4);
 	}
-		
+	//Calculates TA weightings	
 	private void calculateTriplet_aPriori(){
 		int[][][] TripletCount=new int[4][4][4];
 		int overallCount=0;
@@ -77,7 +77,7 @@ public class SequenceStats {
 		sum=sum/61;
 		System.out.println("Triplet_aPriori Average: "+sum);
 	}
-	
+	//Calculates NT weightings	
 	private void calculateBaseTransition(){
 		int[][] BaseTransitionCount=new int[4][4];
 		int overallCount=0;
@@ -103,6 +103,7 @@ public class SequenceStats {
 		sum=sum/16;
 		System.out.println("BaseTransition Average: "+sum);
 	}
+	//Calculates TT weightings	
 	private void calculateTripletTransition(){
 		int overallCountFront=0;
 		int overallCountAfter=0;
@@ -241,7 +242,7 @@ public class SequenceStats {
 		}
 	}
 	
-	//Berechnet die Elementeweise Differenz zwischen den beiden Input-Matrizen
+	//Difference by Element between matrices
 		public double[][] MatrixDiff(double[][] M1,double[][] M2){
 			double[][]Erg=new double[4][4];
 			for (int i=0;i<4;i++){
@@ -259,7 +260,7 @@ public class SequenceStats {
 			PrintMatrix(Erg);
 			return Erg;
 		}
-		//Druckt eine 4x4 Übergangsmatrix auf der Konsole aus
+		//Prints the 4x4 transition matrix in the console
 		public void PrintMatrix(double[][] Proz){
 			System.out.println("Vertikal: s(n) horizontal: s(n+1)");
 			System.out.println("--- C ------- T ------- A ------- G");

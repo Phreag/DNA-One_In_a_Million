@@ -1,7 +1,7 @@
 package Objects;
 
 public class Constants {
-	//Gibt die Polar Requirement der Aminosäure zurück.
+	//Holds data for Polar requirements
 	public static double getPolarReq(String AminoAcid){
 		switch(AminoAcid){
 		case "Ala":
@@ -45,7 +45,7 @@ public class Constants {
 		case "Val":
 			return 5.6;
 		}
-		System.out.println("FEHLERHAFTE AMINOSÄURE: "+ AminoAcid);
+		System.out.println("Unrecognized Amino Acid: "+ AminoAcid);
 		return 0;
 	}
 }
