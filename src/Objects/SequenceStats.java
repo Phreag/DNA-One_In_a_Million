@@ -113,7 +113,7 @@ public class SequenceStats {
 				for(int k=0;k<4;k++){
 					for(int l=0;l<4;l++){
 						overallCountFront+=rawData[i][j][k][l][0];
-						overallCountAfter+=rawData[i][j][k][l][0];
+						overallCountAfter+=rawData[i][j][k][l][1];
 					}
 				}
 			}
@@ -263,11 +263,11 @@ public class SequenceStats {
 		//Prints the 4x4 transition matrix in the console
 		public void PrintMatrix(double[][] Proz){
 			System.out.println("Vertikal: s(n) horizontal: s(n+1)");
-			System.out.println("--- C ------- T ------- A ------- G");
-			System.out.println("C "+df.format(Proz[0][0])+" -- "+df.format(Proz[1][0])+" -- "+df.format(Proz[2][0])+" -- "+df.format(Proz[3][0]));
-			System.out.println("T "+df.format(Proz[0][1])+" -- "+df.format(Proz[1][1])+" -- "+df.format(Proz[2][1])+" -- "+df.format(Proz[3][1]));
-			System.out.println("A "+df.format(Proz[0][2])+" -- "+df.format(Proz[1][2])+" -- "+df.format(Proz[2][2])+" -- "+df.format(Proz[3][2]));
-			System.out.println("G "+df.format(Proz[0][3])+" -- "+df.format(Proz[1][3])+" -- "+df.format(Proz[2][3])+" -- "+df.format(Proz[3][3]));	
+			System.out.println("--- T ------- C ------- A ------- G");
+			System.out.println("T "+df.format(Proz[0][0]/4)+" -- "+df.format(Proz[1][0]/4)+" -- "+df.format(Proz[2][0]/4)+" -- "+df.format(Proz[3][0]/4));
+			System.out.println("C "+df.format(Proz[0][1]/4)+" -- "+df.format(Proz[1][1]/4)+" -- "+df.format(Proz[2][1]/4)+" -- "+df.format(Proz[3][1]/4));
+			System.out.println("A "+df.format(Proz[0][2]/4)+" -- "+df.format(Proz[1][2]/4)+" -- "+df.format(Proz[2][2]/4)+" -- "+df.format(Proz[3][2]/4));
+			System.out.println("G "+df.format(Proz[0][3]/4)+" -- "+df.format(Proz[1][3]/4)+" -- "+df.format(Proz[2][3]/4)+" -- "+df.format(Proz[3][3]/4));	
 		}
 
 	public double[] getBase_aPriori() {

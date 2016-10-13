@@ -130,17 +130,27 @@ public class MainClass {
 		//		}
   		DNASequence Seq1=conn.LoadFastaFile("568815597");
   		SequenceStats Stat=new SequenceStats(Seq1.getSequenceAsString());
-//		
+		
 		baseAprioriWeights=Stat.getBase_aPriori();
 		tripletAprioriWeights=Stat.getTriplet_aPriori();
 		baseTransitionWeights=Stat.getBaseTransition();
 		tripletTransitionWeights=Stat.getTripletTransition();
-		TransitionTransversionBias=2;
-//		CodePermutation P=new CodePermutation();
-//		P.generateCodes();
-		setWeightings(false, true, false, true);
-		CodeFinder C=new CodeFinder();
-    	C.RunCodeFinder(15);
+		
+		String[]Bases={"T","C","A","G"};
+		DecimalFormat df = new DecimalFormat("0.0000"); 
+		for (int x=0;x<4;x++){
+			for (int y=0;y<4;y++){
+				for (int z=0;z<4;z++){
+						System.out.println(Bases[x]+Bases[y]+Bases[z]+";"+df.format(tripletTransitionWeights[x][y][z][0][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][0][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][1][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][2][1]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][0]/4)+";"+df.format(tripletTransitionWeights[x][y][z][3][1]/4));
+				}
+			}
+		}
+//		TransitionTransversionBias=2;
+////		CodePermutation P=new CodePermutation();
+////		P.generateCodes();
+//		setWeightings(false, true, false, true);
+//		CodeFinder C=new CodeFinder();
+//    	C.RunCodeFinder(15);
 //  	new CodeEvaluation(P.calculateValues()).countBetterCodes();
 //		CodeFinder C=new CodeFinder();
 //      setWeightings(true,true,true,true);
