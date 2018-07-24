@@ -87,7 +87,7 @@ public class SequenceStats {
 				for(int k=0;k<4;k++){
 					for(int l=0;l<4;l++){
 						//This will ignore 4 Bases at the beginning - shit happens :P
-						BaseTransitionCount[k][l]+=rawData[i][j][k][l][0];
+						BaseTransitionCount[k][l]+=rawData[i][j][k][l][1];
 						overallCount+=rawData[i][j][k][l][0];
 					}
 				}
